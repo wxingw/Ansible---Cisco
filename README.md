@@ -114,7 +114,7 @@ ansible_become_password: cisco
     ping:
 ```
 
-## Test result
+## Test Results
 ```bash
 (myenv) [ubuntulab@workstation-centos8 cisco-nxos-branch1]$ ansible-playbook -i dynamic_inventory-4.py dynamic_play.yml --ask-vault-password 2>/dev/null
 Vault password:
