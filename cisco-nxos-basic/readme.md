@@ -1,5 +1,5 @@
 ```bash
-ansible-playbook show-run.yml --vault-password-file .vault_password_file 2>/dev/null
+(myenv) [ubuntulab@workstation-centos8 cisco-nxos-base]$ ansible-playbook show-run.yml --vault-password-file .vault_password_file 2>/dev/null
 PLAY [Collect Cisco Nexus Running Configuration] *******************************
 
 TASK [Show running configuration] **********************************************
