@@ -1,0 +1,29 @@
+---
+- name: Backup Cisco Nexus Running Configuration to FTP
+  hosts: nxos_switches
+  gather_facts: no
+  connection: network_cli
+
+  vars:
+    ftp_server: "10.10.35.21"
+    ftp_user: "ftpuser"
+    backup_path: "/backups/nexus"
+
+  vars_files:
+    - secrets.yml
+
+  tasks:
+    - name: Generate timestamp for backup file
+      set_fact:
+        timestamp: "{{ lookup('pipe', 'date +%Y%m%d-%H%M%S') }}"
+
+    - name: Backup running configuration to FTP server
+      nxos_command:
+        commands:
+          - "copy running-config ftp://{{ ftp_user }}:{{ ftp_pass }}@{{ ftp_server }}{{ backup_path }}/backup-{{ inventory_hostname }}-{{ timestamp }}.cfg vrf management"
+      register: backup_result
+
+    - name: Show backup result
+      debug:
+        var: backup_result
+
