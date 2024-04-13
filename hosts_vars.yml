@@ -1,0 +1,18 @@
+hosts_list:
+  hosts:
+    n7k-1:
+      ansible_host: 10.10.35.99
+    n9k-a:
+      ansible_host: 10.10.35.100
+    n9k-b:
+      ansible_host: 10.10.35.101
+
+  group_vars:
+    ansible_become: yes
+    ansible_become_method: enable
+    #ansible_become_password: cisco
+    ansible_connection: ansible.netcommon.network_cli
+    ansible_network_os: nxos
+    #ansible_ssh_password: cisco
+    ansible_user: cisco
+
