@@ -1,4 +1,4 @@
-
+```bash
 PLAY [Collect Cisco Nexus Running Configuration] *******************************
 
 TASK [Show running configuration] **********************************************
@@ -3515,3 +3515,4 @@ n7k-1                      : ok=2    changed=0    unreachable=0    failed=0    s
 n9k-a                      : ok=2    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
 n9k-b                      : ok=2    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
 
+```
