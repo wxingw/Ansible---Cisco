@@ -1,0 +1,1 @@
+# Using-dynamic-inventory-to-manage-Cisco-Nexus-Switches
