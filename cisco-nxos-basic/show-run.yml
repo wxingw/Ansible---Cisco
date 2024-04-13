@@ -1,0 +1,16 @@
+---
+- name: Collect Cisco Nexus Running Configuration
+  hosts: nxos_switches
+  gather_facts: no
+
+  tasks:
+    - name: Show running configuration
+      cisco.nxos.nxos_command:
+        commands:
+          - show running-config
+      register: output
+
+    - name: Display the running configuration
+      debug:
+        var: output.stdout_lines
+

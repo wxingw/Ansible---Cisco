@@ -1,0 +1,17 @@
+---
+- name: Test Cisco NX-OS Connection
+  hosts: nxos_switches
+  collections:
+    - cisco.nxos
+  gather_facts: no
+
+  tasks:
+    - name: Get NX-OS version
+      cisco.nxos.nxos_command:
+        commands: show version
+      register: output
+
+    - name: Display NX-OS version
+      debug:
+        msg: "{{ output.stdout_lines }}"
+

@@ -1,0 +1,11 @@
+[nxos_switches]
+n7k-1 ansible_host=10.10.35.99
+n9k-a ansible_host=10.10.35.100
+n9k-b ansible_host=10.10.35.101
+
+[nxos_switches:vars]
+ansible_network_os=nxos
+ansible_connection=ansible.netcommon.network_cli
+ansible_user=cisco
+ansible_become=yes
+ansible_become_method=enable

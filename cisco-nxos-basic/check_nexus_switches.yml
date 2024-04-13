@@ -1,0 +1,14 @@
+---
+- name: Gather NX-OS Facts
+  hosts: nxos_switches
+  gather_facts: no
+
+  tasks:
+    - name: Gather facts from NX-OS devices
+      cisco.nxos.nxos_facts:
+        gather_subset: all
+
+    - name: Display the gathered facts
+      debug:
+        var: ansible_facts
+
