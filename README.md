@@ -76,10 +76,8 @@ hosts_list:
   group_vars:
     ansible_become: yes
     ansible_become_method: enable
-    ansible_become_password: cisco
     ansible_connection: ansible.netcommon.network_cli
     ansible_network_os: nxos
-    ansible_ssh_password: cisco
     ansible_user: cisco
 ```
 ## Create an Encrypted File:
