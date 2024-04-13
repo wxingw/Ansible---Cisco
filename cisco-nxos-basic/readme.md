@@ -754,9 +754,10 @@ ok: [n9k-a] => {
 PLAY RECAP *********************************************************************
 n7k-1                      : ok=2    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
 n9k-a                      : ok=2    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
-n9k-b                      : ok=2    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
-```bash
+n9k-b                      : ok=2    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+
 ```
+```bash
 (myenv) [ubuntulab@workstation-centos8 cisco-nxos-base]$ ansible-playbook check_nexus_switches.yml --vault-password-file .vault_password_file 2>/dev/null 
 PLAY [Gather NX-OS Facts] ******************************************************
 
