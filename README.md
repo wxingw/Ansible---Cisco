@@ -1,4 +1,4 @@
-# Using-dynamic-inventory-to-manage-Cisco-Nexus-Switches
+# Sample: Using dynamic inventory to manage Nexus Switches
 # Dynamic_inventory.py
 
 ## Summary
