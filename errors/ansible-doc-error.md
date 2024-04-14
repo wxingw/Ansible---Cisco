@@ -42,7 +42,7 @@ If you're unsure what modules are available within the cisco.nxos collection, yo
 - **Local Directory Listing:**
 Navigate to the collection's directory and list the contents of the plugins/modules subdirectory:
 ```bash
-ls /home/ubuntulab/.ansible/collections/ansible_collections/cisco/nxos/plugins/modules
+ls ~/.ansible/collections/ansible_collections/cisco/nxos/plugins/modules
 ```
 - **Online Resources:**
 Check the Ansible Galaxy website or the official documentation provided by the maintainer for a list of included modules.
