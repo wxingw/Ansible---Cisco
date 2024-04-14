@@ -1,0 +1,19 @@
+---
+# play1
+- name: add a user
+  hosts: dc2
+  vars_files:
+    - vars/main.yml
+  tasks:
+    - name: add user {{ username }}
+      user:
+        name: "{{ username }}"
+        uid: 1234
+        shell: /sbin/nologin
+
+    - name: remove user {{ username }}
+      user:
+        name: "{{ username }}"
+        state: absent
+        remove: yes
+

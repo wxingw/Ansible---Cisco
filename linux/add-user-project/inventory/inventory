@@ -1,0 +1,9 @@
+[dc1]
+servera ansible_host=10.10.35.21
+serverb ansible_host=10.10.35.22
+
+[dc2]
+serverd ansible_host=10.10.35.23
+
+[dc3]
+workstation ansible_host=10.10.35.25
