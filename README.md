@@ -1,4 +1,4 @@
-# Ansible Management for Cisco Nexus Switches
+# Ansible for Cisco Nexus Switches
 
 This repository contains Ansible playbooks and scripts designed to manage Cisco Nexus switches. It includes automation for tasks such as configuration backups, retrieving running configurations, and basic troubleshooting. The setup utilizes Ansible's capabilities to work with dynamic inventories and provides a robust framework for network automation.
 
