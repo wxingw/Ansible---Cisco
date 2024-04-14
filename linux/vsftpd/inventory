@@ -1,0 +1,7 @@
+[ftpservers]
+servera
+serverb
+serverd
+
+[ftpclients]
+serverc

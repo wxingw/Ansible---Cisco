@@ -1,0 +1,111 @@
+---
+- name: FTP server is installed
+  hosts:
+    - ftpservers
+  gather_facts: true
+  vars_files:
+    - vars/defaults-template.yml
+    - vars/vars.yml
+
+  tasks:
+    - name: Packages are installed (CentOS)
+      yum:
+        name: "{{ vsftpd_package }}"
+        state: present
+      when: ansible_os_family == "RedHat"
+
+    - name: Packages are installed (Ubuntu)
+      apt:
+        name: "{{ vsftpd_package }}"
+        state: present
+        update_cache: yes
+      when: ansible_os_family == "Debian"
+
+    - name: Ensure service is started
+      service:
+        name: "{{ vsftpd_service }}"
+        state: started
+        enabled: true
+
+    - name: Ensure vsftpd config directory exists (Ubuntu)
+      file:
+        path: /etc/vsftpd
+        state: directory
+        owner: root
+        group: root
+        mode: '0755'
+      when: ansible_os_family == "Debian"
+
+
+    - name: Configuration file is installed
+      template:
+        src: templates/vsftpd.conf.j2
+        dest: "{{ vsftpd_config_file }}"
+        owner: root
+        group: root
+        mode: 0600
+      notify: restart vsftpd
+
+    - name: Firewalld is installed (CentOS)
+      yum:
+        name: firewalld
+        state: present
+      when: ansible_os_family == "RedHat"
+
+    - name: Firewalld is installed (Ubuntu)
+      apt:
+        name: ufw
+        state: present
+      when: ansible_os_family == "Debian"
+
+    - name: Firewalld is started and enabled (CentOS)
+      service:
+        name: firewalld
+        state: started
+        enabled: yes
+      when: ansible_os_family == "RedHat"
+
+    - name: UFW is started and enabled (Ubuntu)
+      service:
+        name: ufw
+        state: started
+        enabled: yes
+      when: ansible_os_family == "Debian"
+
+    - name: FTP port is open (CentOS)
+      firewalld:
+        service: ftp
+        permanent: true
+        state: enabled
+        immediate: yes
+      when: ansible_os_family == "RedHat"
+
+    - name: FTP port is open (Ubuntu)
+      ufw:
+        rule: allow
+        port: '21'
+        proto: tcp
+      when: ansible_os_family == "Debian"
+
+    - name: FTP passive data ports are open (CentOS)
+      firewalld:
+        port: 21000-21020/tcp
+        permanent: true
+        state: enabled
+        immediate: yes
+      when: ansible_os_family == "RedHat"
+
+    - name: FTP passive data ports are open (Ubuntu)
+      ufw:
+        rule: allow
+        from_port: 21000
+        to_port: 21020
+        proto: tcp
+      when: ansible_os_family == "Debian"
+
+  handlers:
+    - name: restart vsftpd
+      service:
+        name: "{{ vsftpd_service }}"
+        state: restarted
+

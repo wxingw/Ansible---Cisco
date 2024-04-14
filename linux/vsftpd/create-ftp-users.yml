@@ -1,0 +1,34 @@
+---
+- name: Create FTP user accounts
+  hosts: ftpservers
+  become: yes  # Use sudo to become the root user
+  vars:
+    ftp_username: ftpuser
+    ftp_home: /var/ftp/home/ftpuser  # Adjust the FTP home directory as needed
+
+  vars_files:
+    - secret.yml
+
+  tasks:
+    - name: Ensure user {{ ftp_username }} exists
+      user:
+        name: "{{ ftp_username }}"
+        password: "{{ ftp_password | password_hash('sha512') }}"
+        shell: /bin/bash  # Set the shell to nologin to prevent SSH access
+        home: "{{ ftp_home }}"
+        create_home: yes
+
+    - name: Set ownership and permissions for the user's home directory
+      file:
+        path: "{{ ftp_home }}"
+        state: directory
+        owner: "{{ ftp_username }}"
+        group: "{{ ftp_username }}"
+        mode: '0755'
+
+    - name: Ensure vsftpd is running and enabled
+      service:
+        name: vsftpd
+        state: started
+        enabled: yes
+

@@ -1,0 +1,49 @@
+---
+- name: Create and transfer test file to FTP servers
+  hosts: serverc
+  gather_facts: no
+
+  vars:
+    test_file: /tmp/test_file.txt
+    ftp_servers:
+      - servera
+    ftp_user: "ftpuser"
+
+  vars_files:
+    - secret.yml
+
+  tasks:
+    - name: Create a test file
+      copy:
+        content: "This is a test file."
+        dest: "{{ test_file }}"
+
+    - name: Transfer the test file to FTP servers
+      command: lftp -u {{ ftp_user }},{{ ftp_password }} -e "put {{ test_file }}; bye" -p 21 {{ item }}
+      loop: "{{ ftp_servers }}"
+      ignore_errors: yes
+      register: transfer_results
+
+    - name: Show transfer results
+      debug:
+        msg: "{{ item.stdout_lines }}"
+      loop: "{{ transfer_results.results }}"
+      when: item.rc == 0
+
+    - name: Show transfer errors
+      debug:
+        msg: "Transfer failed with error: {{ item.stderr }}"
+      loop: "{{ transfer_results.results }}"
+      when: item.rc != 0
+
+    - name: List files on FTP servers to verify transfer
+      command: lftp -u {{ ftp_user }},{{ ftp_password }} -e "ls; bye" {{ item }}
+      loop: "{{ ftp_servers }}"
+      register: list_results
+
+    - name: Show files list
+      debug:
+        msg: "{{ item.stdout_lines }}"
+      loop: "{{ list_results.results }}"
+      when: item.rc == 0
+
