@@ -35,3 +35,14 @@ The `ansible-doc` command now successfully retrieves documentation for the Cisco
 - **Monitoring:** Continuously monitor the behavior of Ansible scripts, especially those that interact with Cisco NX-OS modules, to quickly identify and mitigate any issues arising from this version mismatch.
 
 - **Documentation and Support:** Regularly check for updates from Cisco and Ansible documentation to stay informed about compatibility and support changes.
+
+### List Modules in a Collection
+If you're unsure what modules are available within the cisco.nxos collection, you can list all modules in that collection by looking into the collection's directory structure or using online resources:
+
+- **Local Directory Listing:**
+Navigate to the collection's directory and list the contents of the plugins/modules subdirectory:
+```bash
+ls ~/.ansible/collections/ansible_collections/cisco/nxos/plugins/modules
+```
+- **Online Resources:**
+Check the Ansible Galaxy website or the official documentation provided by the maintainer for a list of included modules.
