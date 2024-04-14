@@ -21,17 +21,17 @@ This repository provides a comprehensive suite of Ansible playbooks and scripts 
 
 1. **Install Ansible**:
    Install Ansible on your control machine using pip:
-   \```bash
+   ```bash
    pip install ansible
-   \```
+   ```
 2. **Configure Dynamic Inventory**:
    Adapt the `inventory/dynamic_inventory.py` script for your specific environment to dynamically include both Cisco switches and Linux hosts.
 
 3. **Setup Secure Credentials**:
    Securely store credentials using Ansible Vault:
-   \```bash
+   ```bash
    ansible-vault create secrets.yml
-   \```
+   ```
    Include necessary access credentials such as SSH passwords and remote storage access details.
 
 4. **Playbook Configuration**:
@@ -41,21 +41,21 @@ This repository provides a comprehensive suite of Ansible playbooks and scripts 
 
 - **Running Configurations Backups**:
   Execute configuration backups across all managed devices:
-  \```bash
+  ```bash
   ansible-playbook -i inventory/dynamic_inventory.py playbooks/backup.yml --ask-vault-pass
-  \```
+  ```
 
 - **Displaying Running Configurations**:
   Fetch and display current configurations from devices:
-  \```bash
+  ```bash
   ansible-playbook -i inventory/dynamic_inventory.py playbooks/show_run.yml --ask-vault-pass
-  \```
+  ```
 
 - **Executing Troubleshooting**:
   Run diagnostic and troubleshooting playbooks:
-  \```bash
+  ```bash
   ansible-playbook -i inventory/dynamic_inventory.py playbooks/troubleshoot.yml --ask-vault-pass
-  \```
+  ```
 
 ## Troubleshooting Common Issues
 
