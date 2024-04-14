@@ -1,88 +1,73 @@
-# Ansible for Cisco Nexus Switches
 
-This repository contains Ansible playbooks and scripts designed to manage Cisco Nexus switches. It includes automation for tasks such as configuration backups, retrieving running configurations, and basic troubleshooting. The setup utilizes Ansible's capabilities to work with dynamic inventories and provides a robust framework for network automation.
+# Ansible Automation for Network and System Management
+
+This repository provides a comprehensive suite of Ansible playbooks and scripts designed for robust automation across both Cisco Nexus switches and Linux systems. It focuses on configuration management, system updates, and routine diagnostics, leveraging Ansible's capabilities to handle both network devices and servers.
 
 ## Features
 
-- **Dynamic Inventory**: Utilizes an Ansible dynamic inventory script to automatically discover and define switches in the network.
-- **Automated Backups**: Scheduled backups of switch configurations to a remote server.
-- **Show Running Configuration**: Playbook to fetch and display the current running configuration from the switches.
-- **Basic Troubleshooting**: Includes playbooks for basic network diagnostics.
-- **Expandable Framework**: Easily extendable to include more advanced networking tasks and configurations.
+- **Dynamic Inventory**: Leverages Ansible's dynamic inventory capabilities to manage diverse environments including network devices and servers.
+- **Automated Configuration Management**: Periodic backups of configurations and system settings across Cisco switches and Linux servers.
+- **Operational Commands Execution**: Facilitates execution of operational commands, like retrieving running configurations from Cisco Nexus switches and checking system status on Linux.
+- **Diagnostics and Troubleshooting**: Provides tools for routine network diagnostics and system health checks.
 
 ## Prerequisites
 
-- **Ansible**: Version 2.9 or later.
+- **Ansible**: Version 2.9 or later is required.
 - **Python**: Version 3.6 or later.
-- **Access to Cisco Nexus switches**: SSH access enabled.
-- **FTP or SCP server**: For storing configuration backups.
+- **Device Access**: SSH enabled for Cisco Nexus switches and Linux systems.
+- **Remote Storage**: FTP or SCP server access for storing backups.
 
 ## Setup
 
-### 1. Install Ansible
+1. **Install Ansible**:
+   Install Ansible on your control machine using pip:
+   \```bash
+   pip install ansible
+   \```
+2. **Configure Dynamic Inventory**:
+   Adapt the `inventory/dynamic_inventory.py` script for your specific environment to dynamically include both Cisco switches and Linux hosts.
 
-Ensure that Ansible is installed on your control machine. You can install Ansible with pip:
+3. **Setup Secure Credentials**:
+   Securely store credentials using Ansible Vault:
+   \```bash
+   ansible-vault create secrets.yml
+   \```
+   Include necessary access credentials such as SSH passwords and remote storage access details.
 
-```bash
-pip install ansible
-```
-
-### 2. Configure Dynamic Inventory
-
-- Modify the `inventory/dynamic_inventory.py` script to suit your network topology and authentication methods.
-- Ensure that the script is executable and returns inventory in a JSON format that Ansible can parse.
-
-### 3. Setup Credentials
-
-- Use Ansible Vault to encrypt credentials. Create a `secrets.yml` file to store sensitive data:
-
-```bash
-ansible-vault create secrets.yml
-```
-
-Include credentials like SSH passwords, enable passwords, and FTP/SCP credentials.
-
-### 4. Configure Playbooks
-
-- Edit the playbooks to match your network requirements and paths to the dynamic inventory and secrets file.
+4. **Playbook Configuration**:
+   Customize playbooks according to your network and system requirements. Ensure paths to dynamic inventory and secrets file are correctly set.
 
 ## Usage
 
-### Running Backups
+- **Running Configurations Backups**:
+  Execute configuration backups across all managed devices:
+  \```bash
+  ansible-playbook -i inventory/dynamic_inventory.py playbooks/backup.yml --ask-vault-pass
+  \```
 
-To run a configuration backup across all your Nexus switches:
+- **Displaying Running Configurations**:
+  Fetch and display current configurations from devices:
+  \```bash
+  ansible-playbook -i inventory/dynamic_inventory.py playbooks/show_run.yml --ask-vault-pass
+  \```
 
-```bash
-ansible-playbook -i inventory/dynamic_inventory.py playbooks/backup.yml --ask-vault-pass
-```
-
-### Display Running Configuration
-
-To display the running configuration of the switches:
-
-```bash
-ansible-playbook -i inventory/dynamic_inventory.py playbooks/show_run.yml --ask-vault-pass
-```
-
-### Basic Troubleshooting
-
-Execute troubleshooting playbooks:
-
-```bash
-ansible-playbook -i inventory/dynamic_inventory.py playbooks/troubleshoot.yml --ask-vault-pass
-```
+- **Executing Troubleshooting**:
+  Run diagnostic and troubleshooting playbooks:
+  \```bash
+  ansible-playbook -i inventory/dynamic_inventory.py playbooks/troubleshoot.yml --ask-vault-pass
+  \```
 
 ## Troubleshooting Common Issues
 
-- **Authentication Failures**: Ensure that the credentials in `secrets.yml` are correct and that Ansible Vault is unlocked correctly during playbook runs.
-- **Dynamic Inventory Errors**: Verify that the dynamic inventory script is up-to-date with network changes and correctly configured.
-- **Connection Issues**: Check network connectivity, SSH configurations, and the availability of the FTP/SCP servers.
+- **Authentication Failures**: Check the accuracy of credentials in `secrets.yml` and ensure Ansible Vault is unlocked during runs.
+- **Dynamic Inventory Challenges**: Keep the dynamic inventory script updated with changes in the network and server topology.
+- **Connection Problems**: Verify network connectivity, SSH configurations, and the operational status of FTP/SCP servers.
 
 ## Contributing
 
-Contributions to improve the playbooks or add new features are welcome. Please fork the project and submit a pull request.
+We welcome contributions to enhance the playbooks or introduce new features. Please fork the project, make your changes, and submit a pull request.
 
 ## License
 
-This project is licensed under the MIT License. See the LICENSE file for more details.
+This project is available under the MIT License. See the LICENSE file for more details.
 
