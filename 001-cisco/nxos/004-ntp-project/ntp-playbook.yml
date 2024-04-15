@@ -1,0 +1,29 @@
+---
+- name: Configure NTP on Cisco NX-OS Switches
+  hosts: nxos_switches  # Target group in your inventory
+  gather_facts: no
+
+  vars_files:
+    - secrets.yml
+
+  vars:
+    ansible_ssh_user: "{{ ansible_user }}"  # Assuming ansible_user is defined in your inventory or vars file
+    ansible_ssh_pass: "{{ ansible_ssh_password }}"
+    ansible_become: yes
+    ansible_become_method: enable
+    ansible_become_pass: "{{ ansible_become_password }}"
+    ansible_network_os: nxos
+    ansible_connection: network_cli
+
+  tasks:
+    - name: Configure NTP server
+      ansible.netcommon.cli_command:
+        command: |
+          conf t 
+          ntp server 172.16.0.121
+      register: output
+
+    - name: Print the output
+      debug:
+        var: output
+

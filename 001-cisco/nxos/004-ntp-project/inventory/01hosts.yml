@@ -1,0 +1,24 @@
+canada:
+  children:
+    east:
+      children:
+        toronto:
+          hosts:
+            n7k-1:
+              ansible_host: 10.10.35.99
+            n9k-a:
+              ansible_host: 10.10.35.100
+        montreal:
+          hosts:
+            n9k-b:
+              ansible_host: 10.10.35.101
+      vars:
+        ntp_server: 172.16.0.121
+    central:
+    west:
+    nxos_switches:
+      hosts:
+        n7k-1:
+        n9k-a:
+        n9k-b:
+          ansible_hosts: 10.10.35.101

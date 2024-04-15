@@ -1,0 +1,12 @@
+---
+group_memberships:
+  nxos_switches:
+    - n7k-1
+    - n9k-a
+    - n9k-b
+  toronto:
+    - n7k-1
+    - n9k-a
+  montreal:
+    - n9k-b
+
