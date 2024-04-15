@@ -15,30 +15,30 @@ def load_yaml_file(filepath):
         sys.exit(1)
 
 def main():
-    if len(sys.argv) != 2 or sys.argv[1] != '--list':
+    # Handle the special arguments from Ansible
+    if len(sys.argv) == 2 and sys.argv[1] == '--list':
+        yaml_path = 'hosts_vars.yml'  # Adjust the path to your YAML file
+    else:
         print("Usage: {} --list".format(sys.argv[0]), file=sys.stderr)
         sys.exit(1)
 
-    yaml_path = 'hosts_vars.yml'
     data = load_yaml_file(yaml_path)
 
+    # Construct the inventory dynamically based on the YAML file
     inventory = {
         "_meta": {
             "hostvars": {}
         },
         "all": {
-            "children": []
+            "children": ["nxos_switches", "ungrouped"]
+        },
+        "nxos_switches": {
+            "hosts": list(data["hosts_list"]["hosts"].keys()),
+            "vars": data["hosts_list"]["group_vars"]
         }
     }
 
-    # Dynamically create group structure and assign hosts
-    groups = {}
-    for group, hosts in data["group_memberships"].items():
-        inventory["all"]["children"].append(group)
-        groups[group] = {"hosts": hosts}
-
-    inventory.update(groups)
-
+    # Print the inventory in JSON format
     print(json.dumps(inventory))
 
 if __name__ == "__main__":

@@ -1,136 +1,92 @@
-# Sample: Using dynamic inventory to manage Nexus Switches
-# Dynamic_inventory.py
 
-## Summary
+# Ansible Configuration for Cisco NX-OS Devices Management
 
-This Python script generates a dynamic inventory for Ansible using data from an external YAML file (`hosts_vars.yml`). It constructs an inventory structure based on the YAML data and outputs it in JSON format.
+This repository includes Ansible playbooks and configuration files for managing Cisco NX-OS network devices across multiple sites in Canada, focusing on dynamic inventory management and group-specific configurations.
 
-## Script Overview
+## Directory and File Structure
 
-## **Importing Modules**:
-   ```python
-   #!/usr/bin/env python3
+- **ansible.cfg**: Main Ansible configuration file that sets the default inventory directory and other global settings.
+- **group_vars/**: Contains variables for specific groups of hosts.
+  - `montreal.yml`: Settings for devices in Montreal.
+  - `nxos_switches.yml`: Settings for all Cisco NX-OS switches.
+  - `toronto.yml`: Settings for devices in Toronto.
+- **hosts_vars.yml**: Defines group memberships for hosts, used by the dynamic inventory script.
+- **inventory/**: Contains inventory files and scripts.
+  - `01hosts.yml`: Static inventory file defining hosts under geographical and functional groupings.
+  - `02inventory.py`: Python script for generating a dynamic inventory from `hosts_vars.yml`.
+- **playbook.yml**: Main playbook that tests connectivity to Cisco NX-OS devices.
+- **README.md**: Documentation file (this file).
+- **secrets.yml**: Encrypted file containing sensitive variables (use Ansible Vault).
 
-   import json
-   import sys
-   ```
-## Reading YAML Data Function:
-```python
-def load_yaml_file(filepath):
-    try:
-        with open(filepath, 'r') as file:
-            return yaml.safe_load(file)
-    except FileNotFoundError:
-        print("File not found: {}".format(filepath), file=sys.stderr)
-        sys.exit(1)
-    except Exception as e:
-        print("Error reading file: {}".format(e), file=sys.stderr)
-        sys.exit(1)
+## Inventory Configuration
+
+### Static Inventory
+
+The `01hosts.yml` file organizes hosts into hierarchical groups by region (`east`, `central`, `west`) with specific host variables like `ansible_host`.
+
+### Dynamic Inventory
+
+The `02inventory.py` script dynamically generates inventory data based on group memberships defined in `hosts_vars.yml`. This allows for flexible inventory management and integration into automated workflows.
+
+### `/etc/ansible/hosts`
+
+This default Ansible inventory file is not actively used in this setup, given our custom inventory scripts. However, it provides a fallback or traditional approach to host management. Example entries:
+```plaintext
+[toronto]
+n7k-1
+n9k-a
+
+[montreal]
+n9k-b
+
+[nxos_switches]
+n7k-1
+n9k-a
+n9k-b
 ```
-## Main Function:
-```python
-def main():
-    # Read YAML data from hosts_vars.yml
-    data = load_yaml_file('hosts_vars.yml')
 
-    # Generate the inventory structure
-    inventory = {
-        "_meta": {
-            "hostvars": {}  # Placeholder for host-specific variables
-        },
-        "all": {
-            "children": ["nxos_switches", "ungrouped"]
-        },
-        "nxos_switches": {
-            "hosts": list(data["hosts_list"].keys()),  # List of hosts
-            "vars": data.get("group_vars", {})  # Group-level variables
-        }
-    }
+### `ansible.cfg`
 
-    # Convert inventory to JSON format and print
-    print(json.dumps(inventory))
+This configuration file directs Ansible to use the custom inventory setup and includes other default settings:
+```ini
+[defaults]
+inventory = inventory
 ```
-## Script Invocation:
-```python
-if __name__ == "__main__":
-    main()
-```
-## Execution Flow
-```python
-The script reads the YAML file containing information about hosts and group variables.
-It constructs an inventory structure in memory based on the YAML data.
-The inventory structure includes group-level variables and a list of hosts under the "nxos_switches" group.
-Finally, it converts the inventory structure to JSON format and prints it to standard output.
-```
-## hosts_vars.yml
-```yaml
-hosts_list:
-  hosts:
-    n7k-1:
-      ansible_host: 10.10.35.99
-    n9k-a:
-      ansible_host: 10.10.35.100
-    n9k-b:
-      ansible_host: 10.10.35.101
+This setting specifies that Ansible should look for inventory details within the `inventory/` directory, allowing the use of both static and dynamic inventory mechanisms.
 
-  group_vars:
-    ansible_become: yes
-    ansible_become_method: enable
-    ansible_connection: ansible.netcommon.network_cli
-    ansible_network_os: nxos
-    ansible_user: cisco
-```
-## Create an Encrypted File:
+## Running the Playbook
+
+To test connectivity using the dynamic inventory:
+
 ```bash
-ansible-vault create secrets.yml
+ansible-playbook -i inventory/02inventory.py playbook.yml --ask-vault-pass
 ```
+
+Enter your vault password when prompted to decrypt the `secrets.yml` file.
+
+## Dynamic Inventory Script Usage
+
+The `02inventory.py` script should be invoked with the `--list` argument to generate a JSON formatted inventory that Ansible can understand:
+
 ```bash
-(myenv) [ubuntulab@workstation-centos8 cisco-nxos-branch1]$ ansible-vault create secrets.yml
-New Vault password:
-Confirm New Vault password:
-```
-## Edit the Encrypted File:
-```bash
-ansible-vault edit secrets.yml
-```
-```bash
-(myenv) [ubuntulab@workstation-centos8 cisco-nxos-branch1]$ ansible-vault view secrets.yml
-Vault password:
-ansible_ssh_password: cisco
-ansible_become_password: cisco
-```
-## Use the Encrypted File in Playbook:
-```yaml
-(myenv) [ubuntulab@workstation-centos8 cisco-nxos-branch1]$ cat dynamic_play.yml
----
-- name: Test Cisco NX-OS Connection
-  hosts: all
-  vars_files:
-    - secrets.yml
-  tasks:
-  - name: Check connectivity
-    ping:
+./inventory/02inventory.py --list
 ```
 
-## Test Results
-```bash
-(myenv) [ubuntulab@workstation-centos8 cisco-nxos-branch1]$ ansible-playbook -i dynamic_inventory-4.py dynamic_play.yml --ask-vault-password 2>/dev/null
-Vault password:
+## Troubleshooting
 
-PLAY [Test Cisco NX-OS Connection] **********************************************************
+If encountering errors related to Ansible collection support or playbook locations, verify that:
+- Your Ansible version supports the collections used in tasks.
+- The playbook file names are correct in commands.
 
-TASK [Gathering Facts] **********************************************************************
-ok: [n7k-1]
-ok: [n9k-a]
-ok: [n9k-b]
+## Contributing
 
-TASK [Check connectivity] *******************************************************************
-ok: [n9k-a]
-ok: [n7k-1]
-ok: [n9k-b]
+Contributions to enhance or extend playbook functionalities are welcome. Please fork this repository and submit pull requests for review.
 
-PLAY RECAP **********************************************************************************
-n7k-1                      : ok=2    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
-n9k-a                      : ok=2    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
-n9k-b                      : ok=2    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
-```
+## License
+
+Please specify the license details here, if applicable.
+
+## Contact Information
+
+For more information or support related issues, please contact [Insert Contact Information].
+
