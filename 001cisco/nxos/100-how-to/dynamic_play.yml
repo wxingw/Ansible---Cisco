@@ -1,0 +1,9 @@
+---
+- name: Test Cisco NX-OS Connection
+  hosts: all
+  vars_files:
+    - secrets.yml
+  tasks:
+  - name: Check connectivity
+    ping:
+
