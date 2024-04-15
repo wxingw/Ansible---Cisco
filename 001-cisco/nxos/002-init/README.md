@@ -88,5 +88,4 @@ Please specify the license details here, if applicable.
 
 ## Contact Information
 
-For more information or support related issues, please contact [Insert Contact Information].
-
+For more information or support related issues, please contact me.
