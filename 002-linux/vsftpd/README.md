@@ -61,7 +61,7 @@ Contributions to this project are welcome! Please fork the repository and submit
 
 ## License
 
-Specify your license here or indicate if the project is public domain.
+This project is available under the MIT License. 
 
 ---
 
