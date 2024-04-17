@@ -69,5 +69,5 @@ We welcome contributions to enhance the playbooks or introduce new features. Ple
 
 ## License
 
-This project is available under the MIT License. See the LICENSE file for more details.
+This project is available under the MIT License.
 
