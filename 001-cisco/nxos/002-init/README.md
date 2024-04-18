@@ -84,7 +84,9 @@ Contributions to enhance or extend playbook functionalities are welcome. Please 
 
 ## License
 
-Please specify the license details here, if applicable.
+This project is available under the MIT License.
+
+
 
 ## Contact Information
 
